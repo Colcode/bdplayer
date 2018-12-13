@@ -41,7 +41,7 @@ allprojects {
 
 ```java
 VideoInfo info = new VideoInfo();
-info.setAK("07f201c13afe4d839bcd1b0c324f089c");//你在百度申请到的access key
+info.setAK("*********************************");//你在百度申请到的access key,无效ak可能导致无法播放
 info.setUrl("http://192.168.1.103/dy.mp4");
 info.setTitle("毒液BD中英双字");
 startActivity(new Intent(this, VideoPlayerActivity.class).putExtra("VideoInfo", info));
@@ -57,3 +57,4 @@ startActivity(new Intent(this, VideoPlayerActivity.class).putExtra("VideoInfo", 
 -keep class com.baidu.cloud.media.**{ *;}
 ```
 
+###### by QQ 252016021
