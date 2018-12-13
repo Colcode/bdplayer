@@ -57,4 +57,4 @@ startActivity(new Intent(this, VideoPlayerActivity.class).putExtra("VideoInfo", 
 -keep class com.baidu.cloud.media.**{ *;}
 ```
 
-###### by QQ 252016021
+###### by QQ252016021 2018.12.13
