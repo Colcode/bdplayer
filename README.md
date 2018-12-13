@@ -54,7 +54,7 @@ startActivity(new Intent(this, VideoPlayerActivity.class).putExtra("VideoInfo", 
 -libraryjars libs/bdplayer.jar
 -keep class com.baidu.cloud.media.**{ *;}
 ```
-
+[![演示图片](https://raw.githubusercontent.com/W252016021/bdplayer/master/%E6%BC%94%E7%A4%BA%E5%9B%BE%E7%89%87.png "演示图片")](https://raw.githubusercontent.com/W252016021/bdplayer/master/%E6%BC%94%E7%A4%BA%E5%9B%BE%E7%89%87.png "演示图片")
 ```java
 ###### by QQ252016021            date:2018.12.13
 ```
