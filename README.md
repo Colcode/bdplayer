@@ -32,9 +32,9 @@ allprojects {
 ```
 ##### 引用方式2：
 ```java
-直接下载*bdplayer.aar*文件导入项目即可
+如果导入过慢直接通过下方地址下载*bdplayer.aar*文件导入项目即可
 ```
-###### 下载地址: [bdplayer.aar](https://www.jitpack.io/com/github/W252016021/bdplayer/v1.0/bdplayer-v1.0.aar "bdplayer.aar")
+###### 下载地址: [bdplayer.aar](https://www.lanzous.com/b521906/"bdplayer.aar")
 ##### 播放方式：
 
 ```java
