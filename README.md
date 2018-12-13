@@ -1,9 +1,7 @@
 
 **百度播放器**   [![](https://www.jitpack.io/v/W252016021/bdplayer.svg)](https://www.jitpack.io/#W252016021/bdplayer)
 -
-# bdplayer
-------
-* **基于百度视频sdk封装的播放器类库**
+**基于百度视频sdk封装的播放器类库**
 ```java
 全功能版支持全媒体格式
 支持滑动快进和音量声音滑动调节
@@ -57,4 +55,6 @@ startActivity(new Intent(this, VideoPlayerActivity.class).putExtra("VideoInfo", 
 -keep class com.baidu.cloud.media.**{ *;}
 ```
 
-###### by QQ252016021 2018.12.13
+```java
+###### by QQ252016021            date:2018.12.13
+```
