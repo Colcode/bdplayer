@@ -36,6 +36,7 @@ allprojects {
 ```java
 直接下载*bdplayer.aar*文件导入项目即可
 ```
+###### 下载地址: [bdplayer.aar](https://www.lanzous.com/b521906/ "bdplayer.aar")
 ##### 播放方式：
 
 ```java
