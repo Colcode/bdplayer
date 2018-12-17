@@ -5,7 +5,9 @@ import com.baidu.cloud.media.player.BDCloudMediaPlayer;
 import com.example.admin.bdplayer.BDCloudVideoView;
 import com.example.admin.bdplayer.util.SharedPreferencesBdplayer;
 
-public class VideoInfo {
+import java.io.Serializable;
+
+public class VideoInfo implements Serializable {
     private String Title;
     private String Url;
     private String AK;
