@@ -27,7 +27,7 @@ allprojects {
 
 ```java
  dependencies {
-	        implementation 'com.github.W252016021:bdplayer:v1.1'
+	        implementation 'com.github.W252016021:bdplayer:v1.2'
 	}
 ```
 ##### 引用方式2：
