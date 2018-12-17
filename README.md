@@ -38,10 +38,18 @@ allprojects {
 ##### 播放方式：
 
 ```java
+// VideoInfo.clearBdHestory(this);  //清除记忆播放记录
 VideoInfo info = new VideoInfo();
-info.setAK("*********************************");//你在百度申请到的access key,无效ak可能导致无法播放
-info.setUrl("http://192.168.1.103/dy.mp4");
+info.setAK("**************************");//你在百度申请到的access key,无效ak可能导致无法播放
+info.setUrl("http://192.168.1.103/crzdy.mp4");
 info.setTitle("毒液BD中英双字");
+info.setOpenHestoryPlay(true);//是否开启记忆播放
+info.setDecodeModel(info.DECODE_SW);//设置解码模式，可以设置为 DECODE_AUTO(优先硬解，其次软解) 或者 DECODE_SW(软解)，默认为DECODE_AUTO;
+info.setScaleModel(info.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+// VIDEO_SCALING_MODE_SCALE_TO_FIT 填充，遵守宽高比，有黑边
+// VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING 裁剪，遵守宽高比，无黑边，但视频边缘可能被裁剪
+// VIDEO_SCALING_MODE_SCALE_TO_MATCH_PARENT 铺满，不遵守宽高比，直接铺满显示区域
+info.setLogEnabled(true);//开启日志输出
 startActivity(new Intent(this, VideoPlayerActivity.class).putExtra("VideoInfo", info));
 ```
 ##### 百度access key申请地址：
