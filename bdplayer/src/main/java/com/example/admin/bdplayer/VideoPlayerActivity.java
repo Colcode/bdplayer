@@ -1,5 +1,6 @@
 package com.example.admin.bdplayer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -9,6 +10,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,8 +37,12 @@ import com.baidu.cloud.media.player.BDCloudMediaPlayer;
 import com.baidu.cloud.media.player.IMediaPlayer;
 import com.example.admin.bdplayer.entity.VideoInfo;
 import com.example.admin.bdplayer.util.PlayerHelper;
+import com.example.admin.bdplayer.util.SharedPreferencesBdplayer;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -87,7 +93,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
     private LinearLayout yujiazai;
     private TextView speed_text;
     private TextView title;
-
+    private LinearLayout luckyTip;
+    private TextView luckyInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,23 +117,27 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
         yujiazai = (LinearLayout) findViewById(R.id.yujiazai);
         speed_text = (TextView) findViewById(R.id.speed_txv);
         title = (TextView) findViewById(R.id.title);
+        title.setText(info.getTitle());
         findViewById(R.id.player_set).setOnClickListener(this);
+        findViewById(R.id.track).setOnClickListener(this);
+        findViewById(R.id.player_set).setOnClickListener(this);
+        findViewById(R.id.back).setOnClickListener(this);
+        findViewById(R.id.next).setOnClickListener(this);
         speed = findViewById(R.id.speed);
+        speed.setOnClickListener(this);
         header_bar = findViewById(R.id.header_bar);
         ctrl_bar = findViewById(R.id.ctrl_bar);
         jindutishitext = findViewById(R.id.jindutishi);
-        speed.setOnClickListener(this);
-        findViewById(R.id.track).setOnClickListener(this);
-        findViewById(R.id.player_set).setOnClickListener(this);
         play = findViewById(R.id.play);
         play.setOnClickListener(this);
-        findViewById(R.id.back).setOnClickListener(this);
-        findViewById(R.id.next).setOnClickListener(this);
         ratate = findViewById(R.id.ratate);
         ratate.setOnClickListener(this);
         lock = findViewById(R.id.lock);
         lock.setOnClickListener(this);
-
+        luckyTip = findViewById(R.id.luckyTip);
+        luckyTip.findViewById(R.id.jump).setOnClickListener(this);
+        luckyTip.findViewById(R.id.cancle).setOnClickListener(this);
+        luckyInfo = findViewById(R.id.info);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         this.width = displayMetrics.widthPixels;
@@ -180,28 +191,28 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
         mVV = new BDCloudVideoView(this);
         mVV.setOnBufferingUpdateListener(this);
         mVV.setOnPlayerStateListener(this);
-        mVV.setVideoScalingMode(BDCloudVideoView.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+        mVV.setVideoScalingMode(info.getScaleModel());
         RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(-1, -1);
         rllp.addRule(RelativeLayout.CENTER_IN_PARENT);
         mViewHolder.addView(mVV, rllp);
-        mVV.setLogEnabled(false);
-        mVV.setDecodeMode(BDCloudMediaPlayer.DECODE_AUTO);
-        mVV.setMaxProbeTime(20000); // 设置首次缓冲的最大时长
+        mVV.setLogEnabled(info.isLogEnabled());
+        mVV.setDecodeMode(info.getDecodeModel());
+        mVV.setMaxProbeTime(60000); // 设置首次缓冲的最大时长
+        mVV.setMaxProbeSize(10 * 1024 * 1024);
         mVV.setTimeoutInUs(1000000);
-        title.setText(info.getTitle());
         mVV.setVideoPath(info.getUrl());
         mVV.start();
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.speed){
+        if (v.getId() == R.id.speed) {
             window_speed();
-        }else if(v.getId()==R.id.track){
+        } else if (v.getId() == R.id.track) {
             window_track();
-        }else if(v.getId()==R.id.player_set){
+        } else if (v.getId() == R.id.player_set) {
             window_set();
-        }else if(v.getId()==R.id.play){
+        } else if (v.getId() == R.id.play) {
             if (mVV != null) {
                 if (mVV.isPlaying()) {
                     play.setImageResource(R.drawable.bd_ic_play_selector);
@@ -211,16 +222,16 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
                     mVV.start();
                 }
             }
-        }else if(v.getId()==R.id.back){
+        } else if (v.getId() == R.id.back) {
             releaseVideo();
-        }else if(v.getId()==R.id.next){
+        } else if (v.getId() == R.id.next) {
             int pos = mVV.getCurrentPosition();
             if (pos + 10000 <= mVV.getDuration()) {
                 mVV.seekTo(pos + 10000);
             } else {
                 Toasty.info(VideoPlayerActivity.this, "已到达视频结尾处！").show();
             }
-        }else if(v.getId()==R.id.ratate){
+        } else if (v.getId() == R.id.ratate) {
             Configuration mConfiguration = this.getResources().getConfiguration(); //获取设置的配置信息
             int ori = mConfiguration.orientation; //获取屏幕方向
             if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
@@ -230,7 +241,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
                 //竖屏
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);//强制为横屏
             }
-        }else if(v.getId()==R.id.lock){
+        } else if (v.getId() == R.id.lock) {
             if (suoding) {
                 suoding = false;
                 showBars();
@@ -240,6 +251,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
                 suoding = true;
                 hideAfterFiveSecond();
             }
+        } else if (v.getId() == R.id.cancle) {
+            luckyTip.setVisibility(View.GONE);
+            SharedPreferencesBdplayer.setParam(VideoPlayerActivity.this, Integer.toString(info.getUrl().hashCode()), 0);
+        } else if (v.getId() == R.id.jump) {
+            luckyTip.setVisibility(View.GONE);
+            mVV.seekTo(lastPostion);
         }
     }
 
@@ -742,17 +759,17 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
             seekBar.setEnabled(true);
             updateDuration(mVV.getDuration());
             hideAfterFiveSecond();
+            if (info.isOpenHestoryPlay()) {
+                new Thread(runnable).start();
+            }
         } else if (nowState == BDCloudVideoView.PlayerState.STATE_PLAYING) {
             play.setEnabled(true);
             play.setImageResource(R.drawable.bd_ic_pause_selector);
             seekBar.setEnabled(true);
             startPositionTimer();
         } else if (nowState == BDCloudVideoView.PlayerState.STATE_PLAYBACK_COMPLETED) {
-            play.setEnabled(true);
-            play.setImageResource(R.drawable.bd_ic_play_selector);
             stopPositionTimer();
-            seekBar.setProgress(seekBar.getMax());
-            seekBar.setEnabled(false);
+            releaseVideo();
         } else if (nowState == BDCloudVideoView.PlayerState.STATE_PREPARING) {
             play.setEnabled(false);
             startPositionTimer();
@@ -955,8 +972,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
 
     private void releaseVideo() {
         try {
+
             stopPositionTimer();
             if (mVV != null) {
+                if (info.isOpenHestoryPlay()) {
+                    if (mVV.getCurrentPosition() + 20000 < mVV.getDuration()) {
+                        SharedPreferencesBdplayer.setParam(VideoPlayerActivity.this, Integer.toString(info.getUrl().hashCode()), mVV.getCurrentPosition());
+                    }
+                }
                 mVV.stopPlayback(); // 释放播放器资源
                 mVV.release(); // 释放播放器资源和显示资源
             }
@@ -969,4 +992,37 @@ public class VideoPlayerActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+    private int lastPostion = 0;
+    private Handler handler = new MyHandler(VideoPlayerActivity.this);
+
+    static class MyHandler extends Handler {
+        WeakReference<Activity> mWeakReference;
+
+        private MyHandler(Activity activity) {
+            mWeakReference = new WeakReference<Activity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final VideoPlayerActivity activity = (VideoPlayerActivity) mWeakReference.get();
+            if (activity != null) {
+                if (msg.what == 1) {
+                    activity.luckyInfo.setText("检测到您上次观看到: " + activity.formatMilliSecond(activity.lastPostion) + " 是否恢复?");
+                    activity.luckyTip.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            lastPostion = (int) SharedPreferencesBdplayer.getParam(VideoPlayerActivity.this, Integer.toString(info.getUrl().hashCode()), 0);
+            if (lastPostion != 0) {
+                Message message = new Message();
+                message.what = 1;
+                handler.sendMessage(message);
+            }
+        }
+    };
 }
