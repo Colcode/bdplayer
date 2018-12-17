@@ -48,6 +48,7 @@
             android:text="毒液：致命守护者"
             android:textColor="#FFFFFF"
             android:textSize="17sp" />
+
         <TextView
             android:id="@+id/speed_txv"
             android:layout_width="wrap_content"
@@ -57,6 +58,7 @@
             android:text="546k/s"
             android:textColor="#FFFFFF"
             android:textSize="15sp" />
+
         <ImageView
             android:id="@+id/track"
             android:layout_width="56dp"
@@ -78,6 +80,76 @@
             android:src="@drawable/bd_ic_set_selector" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/luckyTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="60dp"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/left_start_bg"
+            android:padding="3dp"
+            android:text="小贴士:"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-1dp"
+            android:background="@drawable/left_center_bg"
+            android:orientation="horizontal"
+            android:paddingLeft="2dp">
+
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="检测到您上次播放到00:24是否恢复播放?"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/jump"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="继续"
+                android:textColor="#FF4081"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/cancle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="取消"
+                android:textColor="#FF4081"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ctrl_bar"
